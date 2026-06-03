@@ -1,111 +1,102 @@
-# KabarID — Portal Berita CI4 + NewsAPI
+# Portal News
 
-Portal berita Indonesia berbasis **CodeIgniter 4** dengan sumber data dari **NewsAPI.org**.
-
----
+Portal berita Indonesia berbasis CodeIgniter 4 yang mengambil data dari NewsAPI.org.
 
 ## Fitur
-- ✅ Headline utama (hero layout)
-- ✅ Kategori berita (umum, bisnis, teknologi, olahraga, hiburan, sains, kesehatan)
-- ✅ Pencarian berita
-- ✅ Halaman detail artikel
-- ✅ Dark mode / Light mode
-- ✅ Cache otomatis 15 menit (hemat kuota API)
-- ✅ Responsive mobile
 
----
+- Headline berita utama
+- Kategori berita: umum, bisnis, teknologi, olahraga, hiburan, sains, kesehatan
+- Pencarian berita
+- Halaman detail artikel
+- Dark mode dan light mode
+- Cache otomatis 15 menit untuk menghemat request API
+- Tampilan responsif untuk desktop dan mobile
+
+## Teknologi
+
+- PHP 8.2+
+- CodeIgniter 4
+- Composer
+- NewsAPI.org
 
 ## Struktur Project
 
-```
+```text
 portalnews/
-├── app/
-│   ├── Config/
-│   │   ├── NewsApi.php        ← konfigurasi API key & kategori
-│   │   └── Routes.php         ← routing
-│   ├── Controllers/
-│   │   ├── HomeController.php ← halaman utama
-│   │   └── NewsController.php ← kategori, pencarian, detail
-│   ├── Models/
-│   │   └── NewsModel.php      ← semua request ke NewsAPI + cache
-│   └── Views/
-│       ├── layouts/main.php   ← layout utama (navbar, footer)
-│       ├── home/
-│       │   ├── index.php      ← tampilan beranda
-│       │   └── pagination.php ← komponen pagination
-│       └── news/
-│           ├── search.php     ← hasil pencarian
-│           └── detail.php     ← detail artikel
-└── public/
-    ├── css/app.css            ← stylesheet
-    └── js/app.js              ← dark mode & UX
+|-- app/
+|   |-- Config/
+|   |   |-- NewsApi.php
+|   |   `-- Routes.php
+|   |-- Controllers/
+|   |   |-- HomeController.php
+|   |   `-- NewsController.php
+|   |-- Models/
+|   |   `-- NewsModel.php
+|   `-- Views/
+|       |-- layouts/
+|       |-- home/
+|       `-- news/
+|-- public/
+|   |-- css/app.css
+|   |-- js/app.js
+|   `-- index.php
+|-- writable/
+|-- composer.json
+`-- spark
 ```
 
----
+## Instalasi
 
-## Cara Install
+1. Clone repository.
 
-### 1. Buat project CI4 baru
 ```bash
-composer create-project codeigniter4/appstarter portalnews
-cd portalnews
+git clone https://github.com/faizzainuddin/Portal-News.git
+cd Portal-News
 ```
 
-### 2. Salin file dari repo ini
-Salin semua file ke folder CI4 yang baru dibuat (timpa file yang ada).
+2. Install dependency.
 
-### 3. Daftar & dapatkan API Key
-- Buka https://newsapi.org
-- Klik **Get API Key** (gratis, tier developer)
-- Salin API key kamu
-
-### 4. Masukkan API Key
-Edit file `app/Config/NewsApi.php`:
-```php
-public string $apiKey = 'MASUKKAN_API_KEY_KAMU_DI_SINI';
-```
-
-### 5. Izinkan folder cache
 ```bash
-chmod -R 777 writable/
+composer install
 ```
 
-### 6. Jalankan server
+3. Buat file `.env` dari file contoh `env`.
+
+```bash
+copy env .env
+```
+
+4. Isi API key NewsAPI di file `.env`.
+
+```ini
+newsapi.apiKey = MASUKKAN_API_KEY_KAMU
+```
+
+API key bisa didapatkan dari https://newsapi.org.
+
+5. Jalankan server development.
+
 ```bash
 php spark serve
 ```
 
-Akses di browser: **http://localhost:8080**
+6. Buka aplikasi di browser.
 
----
-
-## Batasan NewsAPI (Free Tier)
-| Limit | Keterangan |
-|---|---|
-| 100 request/hari | Cukup untuk pengembangan |
-| Max 5 halaman | Pagination dibatasi |
-| Berita maks 1 bulan lalu | Untuk pencarian (`/everything`) |
-| `localhost` support | ✅ Bisa dipakai saat development |
-
----
+```text
+http://localhost:8080
+```
 
 ## Routing
 
-| URL | Controller | Keterangan |
-|---|---|---|
-| `/` | HomeController::index | Halaman utama |
-| `/kategori/:slug` | NewsController::kategori | Berita per kategori |
-| `/cari?q=...` | NewsController::cari | Pencarian |
-| `/berita/:slug` | NewsController::detail | Detail artikel |
+| URL | Keterangan |
+| --- | --- |
+| `/` | Halaman utama |
+| `/kategori/:slug` | Berita berdasarkan kategori |
+| `/cari?q=keyword` | Pencarian berita |
+| `/berita/:slug` | Detail artikel |
 
----
+## Catatan
 
-## Kategori yang Tersedia
-`umum` · `bisnis` · `teknologi` · `olahraga` · `hiburan` · `sains` · `kesehatan`
-
----
-
-## Tips Pengembangan
-- Ganti `YOUR_NEWSAPI_KEY` secepatnya — tanpa key, semua request akan error
-- Cache tersimpan di `writable/cache/newsapi/` — aman dihapus kapan saja
-- Untuk production, pastikan variabel API key disimpan di `.env`, bukan hardcode
+- Jangan commit file `.env` karena berisi konfigurasi lokal dan API key.
+- Cache NewsAPI tersimpan di `writable/cache/newsapi/` dan aman dihapus saat development.
+- Jika Composer meminta ekstensi `intl`, aktifkan `extension=intl` di `php.ini`.

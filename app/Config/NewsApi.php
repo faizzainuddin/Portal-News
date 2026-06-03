@@ -6,8 +6,8 @@ use CodeIgniter\Config\BaseConfig;
 
 class NewsApi extends BaseConfig
 {
-    // Daftar di https://newsapi.org dan masukkan API key kamu di sini
-    public string $apiKey    = '3c54fdd898eb49c9aacffd3857f7dca9';
+    // Daftar di https://newsapi.org dan simpan API key di file .env.
+    public string $apiKey    = '';
     public string $baseUrl   = 'https://newsapi.org/v2/';
     public string $language  = 'id';
     public string $country   = 'id';
@@ -23,4 +23,11 @@ class NewsApi extends BaseConfig
         'sains'     => 'science',
         'kesehatan' => 'health',
     ];
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->apiKey = (string) env('newsapi.apiKey', $this->apiKey);
+    }
 }
